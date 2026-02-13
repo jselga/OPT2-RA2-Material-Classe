@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "humao.rest-client",
+    "mongodb.mongodb-vscode",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "docker.docker",
+    "usernamehw.errorlens"
+  ]
+}
