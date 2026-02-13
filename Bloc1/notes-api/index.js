@@ -17,10 +17,22 @@ app.get('/api/notes', (request, response, next) => {
         response.json(notes)
     }).catch(err => next(err))
 })
+//POST
+app.post('/api/notes', (request, response, next) => {
 
+    const note = request.body
+    const newNote = new Note({
+        content: note.content,
+        date: new Date(),
+        important: note.important
+    })
+    newNote.save()
+        .then(savedNote => {
+            response.json(savedNote)
+        })
+})
 
 const PORT = process.env.PORT || 3001;
-
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
