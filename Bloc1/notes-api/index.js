@@ -17,6 +17,9 @@ app.get('/api/notes', (request, response, next) => {
         response.json(notes)
     }).catch(err => next(err))
 })
+//TODO Exercici de classe
+app.get('/api/notes/:id')
+
 //POST
 app.post('/api/notes', (request, response, next) => {
 
