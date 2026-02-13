@@ -1,7 +1,22 @@
+### POST Correcte
 POST http://localhost:3001/api/notes 
 Content-Type: application/json
 
 {
-    "content":"Una altra nota sense importància",
-    "important":false
+    "content":"Una nota IMPORTANT",
+    "important":true
 }
+
+### Content missing #1
+
+POST http://localhost:3001/api/notes 
+Content-Type: application/json
+
+{}
+
+### Content missing #2
+
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{ "title": ""}

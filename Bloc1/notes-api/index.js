@@ -21,17 +21,27 @@ app.get('/api/notes', (request, response, next) => {
 app.post('/api/notes', (request, response, next) => {
 
     const note = request.body
+    if (!note || !note.content) {
+        return response.status(400).json({
+            error: 'note.content is missing'
+        })
+    }
     const newNote = new Note({
         content: note.content,
         date: new Date(),
-        important: note.important
+        important: typeof note.important !== 'undefined' ? note.important : false
     })
     newNote.save()
         .then(savedNote => {
-            response.json(savedNote)
-        })
+            response.status(201).json(savedNote)
+        }).catch(err => next(err))
 })
-
+// Middleware: not found
+app.use((request, response) => {
+    response.status(404).json({
+        error: 'Not found'
+    })
+})
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
