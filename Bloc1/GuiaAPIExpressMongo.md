@@ -188,7 +188,7 @@ Pregunta:
 👉 Quin error obtens? És correcte?
 
 ---
-✍️ Exercici: Busca com impementar l'endpoint GET `/api/notes/:id` per poder buscar una nota per id.
+✍️ Exercici: Busca com implementar l'endpoint GET `/api/notes/:id` per poder buscar una nota per id.
 >Pistes: Busca documentació a:
 > - Express sobre `request.params`  
 > - Mongoose mètodes `findBy...`
