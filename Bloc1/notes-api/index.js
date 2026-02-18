@@ -39,6 +39,21 @@ app.post('/api/notes', (request, response, next) => {
             response.status(201).json(savedNote)
         }).catch(err => next(err))
 })
+
+//PUT
+
+app.put('/api/notes/:id', (request, response, next) => {
+    const { id } = request.params;
+    const note = request.body;
+    const newNoteInfo = {
+        content: note.content,
+        important: note.important
+    }
+    Note.findByIdAndUpdate(id, newNoteInfo, { new: true })
+        .then(result => {
+            result ? response.json(note) : response.status(404).end()
+        }).catch(error => next(error))
+})
 // Middleware: not found
 app.use((request, response) => {
     response.status(404).json({
