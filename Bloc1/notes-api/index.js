@@ -54,14 +54,27 @@ app.put('/api/notes/:id', (request, response, next) => {
     //{new:true}: Opció perque retorni a la resposta el nou estat
     Note.findByIdAndUpdate(id, newNoteInfo, { new: true })
         .then(result => {
+            // result ? response.json(note) : next()
             result ? response.json(note) : response.status(404).end()
         }).catch(error => next(error))
 })
 // Middleware: not found
 app.use((request, response) => {
     response.status(404).json({
-        error: 'Not found'
+        error: 'Note not found'
     })
+})
+
+//Middleware: Gestió d'errors id amb format incorrecte o error de servidor
+app.use((error, request, response, next) => {
+    console.error(error)
+    console.log(error.name);
+    if (error.name === 'CastError') {
+        response.status(400).send({ error: 'id used is malformed' })
+    } else {
+        response.status(500).end()
+    }
+
 })
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

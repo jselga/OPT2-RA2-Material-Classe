@@ -211,9 +211,11 @@ Passos:
 * Obtenir `id` dels paràmetres `request.params`
 * Actualitzar amb Mongoose `Note.findByIdAndUpdate`
   [Model.findByIdAndUpdate](https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate())
-* Gestionar cas "no existeix"
+* Gestionar casos d'error:
+  * ID incorrecte
+  * ID no existeix
 
-Prova amb ID incorrecte.
+
 
 ---
 
