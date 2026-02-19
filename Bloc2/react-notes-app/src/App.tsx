@@ -14,12 +14,16 @@ type Note = {
   date: string;
   important: boolean;
 };
+const getAll = () => {
+  return axios.get<Note[]>(`${baseUrl}`).then((res) => res.data);
 
+};
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   useEffect(() => {
-      axios.get<Note[]>(`${baseUrl}`)
-      .then( (res)=>setNotes(res.data))  
+    getAll()
+      .then((notes) => setNotes(notes))
+      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -27,15 +31,14 @@ function App() {
       <h1>Notes App</h1>
       <div className="card">
         <ul>
-      {notes?.map((note)=>(
-        <li key={note._id}>
-          <p>{note.content}</p>
-          <p>created at: {note.date}</p>
-        </li>
-      ))}  
-      </ul>
+          {notes?.map((note) => (
+            <li key={note._id}>
+              <p>{note.content}</p>
+              <p>created at: {note.date}</p>
+            </li>
+          ))}
+        </ul>
       </div>
-
     </div>
   );
 }
