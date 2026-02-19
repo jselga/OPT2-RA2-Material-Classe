@@ -14,11 +14,15 @@ app.use(express.json());
 app.get('/', (request, response) => {
     response.send(`<h1>Notes API go to <a href='/api/notes'> /api/notes</a>  to get all Notes</h1>`)
 })
-app.get('/api/notes', (request, response, next) => {
-    Note.find({}).then(notes => {
-        response.json(notes)
-    }).catch(err => next(err))
+app.get('/api/notes',async (request, response, next) => {
+    try {
+        const notes= await Note.find({});
+        response.json(notes);
+    } catch (error) {
+        next(error)
+    }   
 })
+
 //TODO Exercici de classe
 app.get('/api/notes/:id')
 

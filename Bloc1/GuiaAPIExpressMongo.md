@@ -279,11 +279,11 @@ Prova:
 
 ---
 
-# 🔄 Refactorització futura
+# 🔄 Refactorització
 
-En aquest bloc treballarem amb **Promeses utilitzant `.then()` i `.catch()`**, perquè és coherent amb el que ja heu treballat al Tema 3.
+En aquest bloc hem treballat amb **Promeses utilitzant `.then()` i `.catch()`**, perquè és coherent amb el que ja heu treballat al Tema 3.
 
-Més endavant refactoritzarem el codi a **`async/await`**, que és sucre sintàctic sobre Promeses.
+✍️ Exercici: Refactoritzarem el codi a **`async/await`**, que és sucre sintàctic sobre Promeses.
 
 Objectiu del refactor:
 
@@ -301,4 +301,5 @@ Respon aquestes preguntes:
 2. Per què és important gestionar errors explícitament?
 3. Què passaria si el frontend enviés dades incorrectes i el backend no validés?
 
-Aquest backend serà la base per els següents blocs, on afegirem WebSockets i el connectarem amb React + TypeScript.
+
+>Aquest backend serà la base pels següents blocs, el connectarem amb React + TypeScript i posteriorment afegirem Websockets
