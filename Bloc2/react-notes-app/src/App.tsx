@@ -1,27 +1,14 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import type { Note } from "./types/Note";
+import { getAll } from "./services/notes";
 const baseUrl = "http://localhost:3001/api/notes";
-// Definim el tipus Note ha de coincidir amb el que ens retorna l'API
-/*{
-    "_id": "6996ff0293fba81414283404",
-    "content": "Una nota",
-    "date": "2026-02-19T12:16:02.224Z", //date es retorna com a string
-    "important": true,
-}*/
-type Note = {
-  _id: string;
-  content: string;
-  date: string;
-  important: boolean;
-};
-const getAll = () => {
-  return axios.get<Note[]>(`${baseUrl}`).then((res) => res.data);
 
-};
+
+
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   useEffect(() => {
-    getAll()
+    getAll(baseUrl)
       .then((notes) => setNotes(notes))
       .catch((error) => console.error(error));
   }, []);
