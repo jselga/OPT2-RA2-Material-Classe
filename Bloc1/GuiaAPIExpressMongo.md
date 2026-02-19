@@ -226,8 +226,9 @@ Eliminar una nota.
 
 Passos:
 
-* Buscar per id
-* Eliminar
+* Obtenir `id` dels paràmetres `request.params`
+* Buscar per id i eliminar amb Mongoose `Note.findByIdAndDelete`
+  [Model.findByIdAndDelete](https://mongoosejs.com/docs/api/model.html#Model.findByIdAndDelete())
 * Retornar codi 204 o missatge coherent
 
 ---

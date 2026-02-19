@@ -58,6 +58,14 @@ app.put('/api/notes/:id', (request, response, next) => {
             result ? response.json(note) : response.status(404).end()
         }).catch(error => next(error))
 })
+// DELETE
+app.delete('/api/notes/:id', (request, response, next) => {
+    const { id } = request.params;
+    Note.findByIdAndDelete(id).then(result => {
+        result ? response.status(204).end() : response.status(404).end()
+    }).catch(error => next(error))
+
+})
 // Middleware: not found
 app.use((request, response) => {
     response.status(404).json({
