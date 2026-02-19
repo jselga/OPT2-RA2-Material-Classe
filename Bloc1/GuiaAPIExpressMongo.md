@@ -292,7 +292,9 @@ Objectiu del refactor:
 * Veure l’evolució d’un projecte real
 
 ---
+# Conectar a un FRONT
 
+[Notes-app by Midudev](https://github.com/midudev/notes-app-full-stack-bootcamp)
 # 🧠 Reflexió final
 
 Respon aquestes preguntes:

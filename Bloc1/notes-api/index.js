@@ -3,11 +3,12 @@ require('./mongo');
 
 const express = require('express');
 const app = express();
+const cors =require('cors')
 
 const Note = require('./models/Note');
 const notFound = require('./middlewares/notFound');
 const handleErrors = require('./middlewares/handleErrors');
-
+app.use(cors());
 app.use(express.json());
 
 // GET

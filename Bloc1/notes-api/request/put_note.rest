@@ -2,7 +2,7 @@ PUT http://localhost:3001/api/notes/69961ea7f15b737c27dcb2a8
 Content-Type: application/json
 
 {
-    "content":"Nota actualizada subscribete",
+    "content":"Nota actualizada2 subscribete",
     "important":true
 }
 
