@@ -51,8 +51,9 @@ app.put('/api/notes/:id', (request, response, next) => {
     }
     // id: Identificador de la nota per modificar
     // newNoteInfo: objecte amb la informació per actualitzar
-    //{new:true}: Opció perque retorni a la resposta el nou estat
-    Note.findByIdAndUpdate(id, newNoteInfo, { new: true })
+    //{ returnDocument: 'after' }: Opció perque retorni el docuement després del PUT
+    Note.findByIdAndUpdate(id, newNoteInfo, { returnDocument: 'after' }
+)
         .then(result => {
             // result ? response.json(note) : next()
             result ? response.json(note) : response.status(404).end()
@@ -62,15 +63,13 @@ app.put('/api/notes/:id', (request, response, next) => {
 app.delete('/api/notes/:id', (request, response, next) => {
     const { id } = request.params;
     Note.findByIdAndDelete(id).then(result => {
-        result ? response.status(204).end() : response.status(404).end()
+        result ? response.status(204).end() : next()
     }).catch(error => next(error))
 
 })
 // Middleware: not found
-app.use((request, response) => {
-    response.status(404).json({
-        error: 'Note not found'
-    })
+app.use((request, response,next) => {
+    response.status(404).end()
 })
 
 //Middleware: Gestió d'errors id amb format incorrecte o error de servidor
