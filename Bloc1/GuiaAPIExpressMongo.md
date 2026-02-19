@@ -236,11 +236,11 @@ Passos:
 ## 6️⃣ Middleware notFound
 
 Objectiu:
-Gestionar rutes inexistents.
+Gestionar rutes inexistents de forma modular
 
 Què ha de fer?
 
-* Retornar 404 en format JSON
+* Retornar 404
 
 ---
 

@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 
 const Note = require('./models/Note');
+const notFound = require('./middlewares/notFound');
 
 app.use(express.json());
 
@@ -68,9 +69,7 @@ app.delete('/api/notes/:id', (request, response, next) => {
 
 })
 // Middleware: not found
-app.use((request, response,next) => {
-    response.status(404).end()
-})
+app.use(notFound)
 
 //Middleware: Gestió d'errors id amb format incorrecte o error de servidor
 app.use((error, request, response, next) => {
