@@ -49,6 +49,9 @@ app.put('/api/notes/:id', (request, response, next) => {
         content: note.content,
         important: note.important
     }
+    // id: Identificador de la nota per modificar
+    // newNoteInfo: objecte amb la informació per actualitzar
+    //{new:true}: Opció perque retorni a la resposta el nou estat
     Note.findByIdAndUpdate(id, newNoteInfo, { new: true })
         .then(result => {
             result ? response.json(note) : response.status(404).end()

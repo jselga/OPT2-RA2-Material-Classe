@@ -208,8 +208,9 @@ Actualitzar una nota existent.
 
 Passos:
 
-* Obtenir `id` dels paràmetres
-* Actualitzar amb Mongoose
+* Obtenir `id` dels paràmetres `request.params`
+* Actualitzar amb Mongoose `Note.findByIdAndUpdate`
+  [Model.findByIdAndUpdate](https://mongoosejs.com/docs/api/model.html#Model.findByIdAndUpdate())
 * Gestionar cas "no existeix"
 
 Prova amb ID incorrecte.
