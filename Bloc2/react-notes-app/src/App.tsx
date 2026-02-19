@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 const baseUrl = "http://localhost:3001/api/notes";
 // Definim el tipus Note ha de coincidir amb el que ens retorna l'API
 /*{
@@ -18,9 +18,8 @@ type Note = {
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   useEffect(() => {
-      fetch(`${baseUrl}`)
-      .then( (res)=>res.json())
-      .then((notes)=> setNotes(notes))
+      axios.get<Note[]>(`${baseUrl}`)
+      .then( (res)=>setNotes(res.data))  
   }, []);
 
   return (
