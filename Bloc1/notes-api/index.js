@@ -6,6 +6,7 @@ const app = express();
 
 const Note = require('./models/Note');
 const notFound = require('./middlewares/notFound');
+const handleErrors = require('./middlewares/handleErrors');
 
 app.use(express.json());
 
@@ -25,11 +26,6 @@ app.get('/api/notes/:id')
 app.post('/api/notes', (request, response, next) => {
 
     const note = request.body
-    if (!note || !note.content) {
-        return response.status(400).json({
-            error: 'note.content is missing'
-        })
-    }
     const newNote = new Note({
         content: note.content,
         date: new Date(),
@@ -54,10 +50,9 @@ app.put('/api/notes/:id', (request, response, next) => {
     // newNoteInfo: objecte amb la informació per actualitzar
     //{ returnDocument: 'after' }: Opció perque retorni el docuement després del PUT
     Note.findByIdAndUpdate(id, newNoteInfo, { returnDocument: 'after' }
-)
+    )
         .then(result => {
-            // result ? response.json(note) : next()
-            result ? response.json(note) : response.status(404).end()
+            result ? response.json(note) : next()
         }).catch(error => next(error))
 })
 // DELETE
@@ -72,16 +67,7 @@ app.delete('/api/notes/:id', (request, response, next) => {
 app.use(notFound)
 
 //Middleware: Gestió d'errors id amb format incorrecte o error de servidor
-app.use((error, request, response, next) => {
-    console.error(error)
-    console.log(error.name);
-    if (error.name === 'CastError') {
-        response.status(400).send({ error: 'id used is malformed' })
-    } else {
-        response.status(500).end()
-    }
-
-})
+app.use(handleErrors)
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

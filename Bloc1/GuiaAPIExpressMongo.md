@@ -276,7 +276,6 @@ Prova:
 * [ ] Errors gestionats correctament
 * [ ] Respostes sempre en JSON
 
----
 
 ---
 
