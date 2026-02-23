@@ -32,7 +32,7 @@ Seleccionar:
 - TypeScript
 
 ---
-
+>Per explicar .nvmrc  
 ## 2️⃣ Definir el tipus
 
 `src/types/note.ts`
