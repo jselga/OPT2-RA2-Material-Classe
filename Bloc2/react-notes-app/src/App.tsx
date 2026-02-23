@@ -3,14 +3,15 @@ import type { Note } from "./types/Note";
 import { getAll } from "./services/notes";
 const baseUrl = "http://localhost:3001/api/notes";
 
-
-
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   useEffect(() => {
-    getAll(baseUrl)
-      .then((notes) => setNotes(notes))
-      .catch((error) => console.error(error));
+    try {
+      // getAll(baseUrl).then((notes)=>setNotes(notes));  
+      getAll(baseUrl).then(setNotes); 
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   return (
