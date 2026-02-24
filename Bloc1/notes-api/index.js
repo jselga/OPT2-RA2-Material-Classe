@@ -3,7 +3,7 @@ require('./mongo');
 
 const express = require('express');
 const app = express();
-const cors =require('cors')
+const cors = require('cors')
 
 const Note = require('./models/Note');
 const notFound = require('./middlewares/notFound');
@@ -15,17 +15,26 @@ app.use(express.json());
 app.get('/', (request, response) => {
     response.send(`<h1>Notes API go to <a href='/api/notes'> /api/notes</a>  to get all Notes</h1>`)
 })
-app.get('/api/notes',async (request, response, next) => {
+app.get('/api/notes', async (request, response, next) => {
     try {
-        const notes= await Note.find({});
+        const notes = await Note.find({});
         response.json(notes);
     } catch (error) {
         next(error)
-    }   
+    }
 })
 
-//TODO Exercici de classe
-app.get('/api/notes/:id')
+// Exercici de classe
+app.get('/api/notes/:id', async (request, response, next) => {
+    const { id } = request.params;
+    try {
+        const note = await Note.findById(id);
+        note ? response.json(note) : next();
+        //El next fa al middleware notFound, si no ho hauriem de possar explicitament
+    } catch (error) {
+        next(error)
+    }
+})
 
 //POST
 app.post('/api/notes', (request, response, next) => {
