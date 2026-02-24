@@ -7,12 +7,10 @@ function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [note, setNote] = useState<Note | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
- 
-    getAll(baseUrl).then(setNotes).catch(console.error);
-
-    getById(baseUrl, hardcodedId)
+  const handleGetById = (id: string) => {
+    setError(null);
+    setNote(null);
+    getById(baseUrl, id)
       .then(setNote)
       .catch((error) => {
         if (error.response?.status === 404) {
@@ -23,6 +21,10 @@ function App() {
           setError("Error inesperat");
         }
       });
+  };
+
+  useEffect(() => {
+    getAll(baseUrl).then(setNotes).catch(console.error);
   }, []);
 
   return (
@@ -31,16 +33,16 @@ function App() {
       <div className="card">
         {error && <p style={{ color: "red" }}>{error}</p>}
         {note && (
-          <p>
+          <p style={note?.important?{fontWeight:'800'}:{fontWeight:'200'}}>
             <strong>Id:</strong> {note?._id} - <strong>Content: </strong>{" "}
-            {note?.content}
+            {note?.content} <strong>Created at: {note?.date}</strong>
           </p>
         )}
         <ul>
           {notes?.map((note) => (
             <li key={note._id}>
               <p>{note.content}</p>
-              <p>created at: {note.date}</p>
+              <button onClick={() => handleGetById(note._id)}>Detalls</button>
             </li>
           ))}
         </ul>
