@@ -210,7 +210,36 @@ Aquest patró s’anomena:
 👉 "Lifting state up"
 
 ---
+## 4️⃣ POST al servei
+
+`services/notes.ts`
+
+```ts
+export const create = async (url:string,newObject: { content: string; important: boolean }) => {
+  const res = await axios.post(url, newObject)
+  return res.data
+}
+```
+---
+## 3️⃣ Actualitzar estat local
+```tsx
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const noteToCreate = {
+      content: newContent.content,
+      important: newContent.important,
+    };
+
+    create(baseUrl, noteToCreate).then((createdNote) => {
+      setNotes(notes.concat(createdNote));
+    });
+  };
+
+```
+## ✍️ Exercici
+
+- Impedir enviar formulari buit
+- Mostrar missatge si hi ha error
 
 ---
-
 

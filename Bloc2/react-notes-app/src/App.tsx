@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { NewNote, Note } from "./types/Note";
-import { getAll, getById } from "./services/notes";
+import { create, getAll, getById } from "./services/notes";
 import { NoteForm } from "./NoteForm";
 const baseUrl = "http://localhost:3001/api/notes";
 
@@ -39,7 +39,15 @@ function App() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Creant nota:", newContent);
-    //    setNewContent({ content: "", important: false })
+    const noteToCreate = {
+      content: newContent.content,
+      important: newContent.important,
+    };
+
+    create(baseUrl, noteToCreate).then((createdNote) => {
+      setNotes(notes.concat(createdNote));
+
+    });
   };
 
   useEffect(() => {
