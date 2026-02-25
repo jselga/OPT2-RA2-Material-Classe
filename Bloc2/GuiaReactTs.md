@@ -132,10 +132,84 @@ export type NoteFormProps = {
   onImportantChange: (value: boolean) => void
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 }
+```
+### Component
 
+```tsx
+export const NoteForm = ({
+  newContent,
+  onContentChange,
+  onImportantChange,
+  onSubmit,
+}: NoteFormProps) => {
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        value={newContent.content}
+        onChange={(e) => onContentChange(e.currentTarget.value)}
+      />
+      <input
+        type="checkbox"
+        checked={newContent.important}
+        onChange={(e) => onImportantChange(e.currentTarget.checked)}
+      />
+      <button type="submit">Crear</button>
+    </form>
+  );
+};
+```
+
+---
+## 2️⃣ Utilitzar el component des d’App.tsx
+
+A `App.tsx` mantenim l’estat:
+
+```tsx
+  const [newContent, setNewContent] = useState<NewNote>({
+    content: "",
+    important: false,
+  });
+```
+Creem els handlers:
+```tsx
+  const handleContentChange = (value: string) => {
+    setNewContent((prev) => ({ ...prev, content: value }));
+  };
+  const handleImportantChange = (value: boolean) => {
+    setNewContent((prev) => ({ ...prev, important: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Creant nota:", newContent);
+  };
+```
+
+I utilitzem el component:
+
+```tsx
+<NoteForm
+  newContent={newContent}
+  onContentChange={handleContentChange}
+  onImportantChange={handleImportantChange}
+  onSubmit={handleSubmit}
+/>
+```
+👉 Observa que passem funcions com a props.  
+👉 TypeScript valida que la signatura sigui correcta.
 
 ---
 
+## 3️⃣ Recordatori: què són les props?
+
+- Les props permeten comunicar components.
+- El component pare controla l’estat.
+- El component fill només rep dades i funcions.
+
+Aquest patró s’anomena:
+👉 "Lifting state up"
+
+---
 
 ---
 
