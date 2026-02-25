@@ -7,12 +7,11 @@ export const getAll = async (url:string):Promise<Note []>=> {
 };
 
 export const getById= async (url:string,id:string):Promise<Note>=>{
-console.log(`${url}/${id}`);
 const res = await axios.get<Note>(`${url}/${id}`);
 return res.data;
 }
 
-export const create = async (url:string,note:NewNote):Promise<Note[]> => {
+export const create = async (url:string,note:NewNote):Promise<Note> => {
   const res = await axios.post(url, note)
   return res.data
 }

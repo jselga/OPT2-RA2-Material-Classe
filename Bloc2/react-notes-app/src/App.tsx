@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import type { NewNote, Note } from "./types/Note";
 import { create, getAll, getById } from "./services/notes";
 import { NoteForm } from "./NoteForm";
-const baseUrl = "http://localhost:3001/api/notes";
-
+const baseUrl = import.meta.env.VITE_NOTES_API_URL as string
+const cleanNote = {
+  content: "",
+  important: false,
+};
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [note, setNote] = useState<Note | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-  const [newContent, setNewContent] = useState<NewNote>({
-    content: "",
-    important: false,
-  });
+  const [newContent, setNewContent] = useState<NewNote>(cleanNote);
   const handleGetById = (id: string) => {
     setError(null);
     setNote(null);
@@ -47,10 +47,7 @@ function App() {
     create(baseUrl, noteToCreate).then((createdNote) => {
       setNotes(notes.concat(createdNote));
       // Reset del formulari
-      setNewContent({
-        content: "",
-        important: false,
-      });
+      setNewContent(cleanNote);
     });
   };
 
