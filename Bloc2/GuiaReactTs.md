@@ -32,7 +32,19 @@ Seleccionar:
 - TypeScript
 
 ---
->Per explicar .nvmrc  
+### Fixar la versió de Node
+Per a garantir la compatibilitat futura del nostres projecte és important que el nostre projecte tingui informació de la versió de node utilitzada. Normalmlent s'indica a la documentació però per ser més explicit utilitzarem el fitxer `.nvmrc`  
+
+Es crea el fitxer a l'arrel del projecte i s'especifica la versió actual amb la que esteu fent el projecte. Es pot saber fent node -v
+```bash
+v24.13.1
+```
+Un cop definit qui faci servir el projecte només haurà de posar a la consola
+```bash
+nvm use
+```
+Procureu fer servir una versió LTS
+[Node.js Releases](https://nodejs.org/en/about/previous-releases)
 ## 2️⃣ Definir el tipus
 
 `src/types/note.ts`
@@ -98,10 +110,82 @@ Objectiu: entendre la diferència entre:
 - Recuperar formularis controlats
 - Crear una nova nota
 - Actualitzar la llista sense recarregar
+- Entendre el pas de props entre components
+- Tipar correctament les props amb TypeScript
 
 ---
 
-## 1️⃣ Formulari controlat
+## 1️⃣ Separar el formulari en un component (Props + TypeScript)
+
+Crearem un component `NoteForm.tsx`.
+
+### Tipar les props
+
+```tsx
+type NoteFormProps = {
+  newContent: string
+  onContentChange: (value: string) => void
+  onSubmit: (e: React.FormEvent) => void
+}
+```
+
+### Component
+
+```tsx
+export const NoteForm = ({
+  newContent,
+  onContentChange,
+  onSubmit
+}: NoteFormProps) => {
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        value={newContent}
+        onChange={(e) => onContentChange(e.target.value)}
+      />
+      <button type="submit">Crear</button>
+    </form>
+  )
+}
+```
+
+---
+
+## 2️⃣ Utilitzar el component des d’App.tsx
+
+A `App.tsx` mantenim l’estat:
+
+```tsx
+const [newContent, setNewContent] = useState('')
+```
+
+I utilitzem el component:
+
+```tsx
+<NoteForm
+  newContent={newContent}
+  onContentChange={setNewContent}
+  onSubmit={handleSubmit}
+/>
+```
+
+👉 Observa que passem funcions com a props.
+👉 TypeScript valida que la signatura sigui correcta.
+
+---
+
+## 3️⃣ Recordatori: què són les props?
+
+- Les props permeten comunicar components.
+- El component pare controla l’estat.
+- El component fill només rep dades i funcions.
+
+Aquest patró s’anomena:
+👉 "Lifting state up"
+
+---
+
+## 4️⃣ POST al servei
 
 ```tsx
 const [newContent, setNewContent] = useState('')
@@ -117,44 +201,4 @@ const [newContent, setNewContent] = useState('')
 
 ---
 
-## 2️⃣ POST al servei
-
-`services/notes.ts`
-
-```ts
-export const create = async (newObject: { content: string; important: boolean }) => {
-  const res = await axios.post('http://localhost:3000/api/notes', newObject)
-  return res.data
-}
-```
-
----
-
-## 3️⃣ Actualitzar estat local
-
-```tsx
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault()
-
-  const noteToCreate = {
-    content: newContent,
-    important: false
-  }
-
-  create(noteToCreate)
-    .then(createdNote => {
-      setNotes(notes.concat(createdNote))
-      setNewContent('')
-    })
-}
-```
-
----
-
-## ✍️ Exercici
-
-- Impedir enviar formulari buit
-- Mostrar missatge si hi ha error
-
----
 
