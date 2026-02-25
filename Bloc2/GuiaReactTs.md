@@ -221,7 +221,7 @@ export const create = async (url:string,newObject: { content: string; important:
 }
 ```
 ---
-## 3️⃣ Actualitzar estat local
+## 5️⃣ Actualitzar estat local
 ```tsx
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

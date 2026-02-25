@@ -46,7 +46,11 @@ function App() {
 
     create(baseUrl, noteToCreate).then((createdNote) => {
       setNotes(notes.concat(createdNote));
-
+      // Reset del formulari
+      setNewContent({
+        content: "",
+        important: false,
+      });
     });
   };
 
