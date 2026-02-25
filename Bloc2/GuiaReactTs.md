@@ -122,82 +122,20 @@ Crearem un component `NoteForm.tsx`.
 ### Tipar les props
 
 ```tsx
-type NoteFormProps = {
-  newContent: string
+export type NewNote = {
+  content: string;
+  important: boolean;
+};
+export type NoteFormProps = {
+  newContent: NewNote
   onContentChange: (value: string) => void
-  onSubmit: (e: React.FormEvent) => void
+  onImportantChange: (value: boolean) => void
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 }
-```
 
-### Component
-
-```tsx
-export const NoteForm = ({
-  newContent,
-  onContentChange,
-  onSubmit
-}: NoteFormProps) => {
-  return (
-    <form onSubmit={onSubmit}>
-      <input
-        value={newContent}
-        onChange={(e) => onContentChange(e.target.value)}
-      />
-      <button type="submit">Crear</button>
-    </form>
-  )
-}
-```
 
 ---
 
-## 2️⃣ Utilitzar el component des d’App.tsx
-
-A `App.tsx` mantenim l’estat:
-
-```tsx
-const [newContent, setNewContent] = useState('')
-```
-
-I utilitzem el component:
-
-```tsx
-<NoteForm
-  newContent={newContent}
-  onContentChange={setNewContent}
-  onSubmit={handleSubmit}
-/>
-```
-
-👉 Observa que passem funcions com a props.
-👉 TypeScript valida que la signatura sigui correcta.
-
----
-
-## 3️⃣ Recordatori: què són les props?
-
-- Les props permeten comunicar components.
-- El component pare controla l’estat.
-- El component fill només rep dades i funcions.
-
-Aquest patró s’anomena:
-👉 "Lifting state up"
-
----
-
-## 4️⃣ POST al servei
-
-```tsx
-const [newContent, setNewContent] = useState('')
-
-<form onSubmit={handleSubmit}>
-  <input
-    value={newContent}
-    onChange={(e) => setNewContent(e.target.value)}
-  />
-  <button type="submit">Crear</button>
-</form>
-```
 
 ---
 
