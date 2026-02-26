@@ -8,7 +8,9 @@ const cors = require('cors')
 const Note = require('./models/Note');
 const notFound = require('./middlewares/notFound');
 const handleErrors = require('./middlewares/handleErrors');
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN
+}))
 app.use(express.json());
 
 // GET
