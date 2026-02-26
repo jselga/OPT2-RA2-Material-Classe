@@ -242,4 +242,41 @@ export const create = async (url:string,newObject: { content: string; important:
 - Mostrar missatge si hi ha error
 
 ---
+# Sessió 5 – Editar dades (PUT) i reutilització del formulari
+
+## 🎯 Objectius
+
+- Reutilitzar el mateix formulari per editar
+- Implementar PUT
+- Entendre estat condicional (mode edició)
+- Mantenir el mateix ordre de treball que a la Sessió 4
+
+Treballarem en aquest ordre:
+
+1️⃣ Estat\
+2️⃣ Component\
+3️⃣ Servei\
+4️⃣ Modificació Handlers
+
+
+---
+
+## 1️⃣ Estat
+
+Afegim estat per controlar si estem editant una nota:
+
+```tsx
+const [editingNote, setEditingNote] = useState<Note | null>(null)
+```
+
+Quan vulguem editar una nota, carregarem el seu contingut al formulari:
+
+```tsx
+  const handleEdit = (note: Note) => {
+    setEditingNote(note);
+    setNewContent({ content: note.content, important: note.important });
+  };
+```
+
+---
 

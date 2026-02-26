@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { NewNote, Note } from "./types/Note";
 import { create, getAll, getById } from "./services/notes";
 import { NoteForm } from "./NoteForm";
-const baseUrl = import.meta.env.VITE_NOTES_API_URL as string
+const baseUrl = import.meta.env.VITE_NOTES_API_URL as string;
 const cleanNote = {
   content: "",
   important: false,
@@ -13,6 +13,8 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [newContent, setNewContent] = useState<NewNote>(cleanNote);
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+
   const handleGetById = (id: string) => {
     setError(null);
     setNote(null);
@@ -51,6 +53,10 @@ function App() {
     });
   };
 
+  const handleEdit = (note: Note) => {
+    setEditingNote(note);
+    setNewContent({ content: note.content, important: note.important });
+  };
   useEffect(() => {
     getAll(baseUrl).then(setNotes).catch(console.error);
   }, []);
