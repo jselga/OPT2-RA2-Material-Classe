@@ -9,7 +9,18 @@ const Note = require('./models/Note');
 const notFound = require('./middlewares/notFound');
 const handleErrors = require('./middlewares/handleErrors');
 app.use(cors({
-  origin: process.env.CORS_ORIGIN
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            process.env.CORS_ORIGIN, 'http://localhost:5174'
+        ]
+        // Permet peticions sense origin (Postman, REST Client, curl)
+        if (!origin) return callback(null, true)
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    }
 }))
 app.use(express.json());
 
