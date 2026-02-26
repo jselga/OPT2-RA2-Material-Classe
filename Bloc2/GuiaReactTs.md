@@ -291,3 +291,15 @@ A la llista de notes afegim un botó:
 Ara el mateix formulari servirà tant per crear com per editar.
 
 ---
+## 3️⃣ Servei (PUT)
+
+Al fitxer `services/notes.ts` afegim:
+
+```ts
+export const update = async (url:string,id: string,updatedNote: NewNote):Promise<Note> => {
+  const res = await axios.put(`${url}/${id}`, updatedNote)
+  return res.data
+}
+```
+
+---
