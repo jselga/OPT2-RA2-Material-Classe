@@ -249,14 +249,16 @@ export const create = async (url:string,newObject: { content: string; important:
 - Reutilitzar el mateix formulari per editar
 - Implementar PUT
 - Entendre estat condicional (mode edició)
-- Mantenir el mateix ordre de treball que a la Sessió 4
+
 
 Treballarem en aquest ordre:
 
 1️⃣ Estat\
 2️⃣ Component\
 3️⃣ Servei\
-4️⃣ Modificació Handlers
+4️⃣ Modificació Handlers\
+5️⃣ Canvis diversos\
+6️⃣ Problemes amb UPDATE
 
 
 ---
@@ -308,31 +310,50 @@ export const update = async (url:string,id: string,updatedNote: NewNote):Promise
 Modifiquem la funció perquè detecti si estem editant:
 
 ```tsx
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault()
-
-  const noteToSave = {
-    content: newContent,
-    important: false
-  }
-
-  if (editingNote) {
-    update(editingNote._id, noteToSave)
-      .then(updatedNote => {
-        setNotes(
-          notes.map(n =>
-            n._id === updatedNote._id ? updatedNote : n
-          )
-        )
-        setEditingNote(null)
-        setNewContent('')
-      })
-  } else {
-    create(baseUrl, noteToSave)
-      .then(createdNote => {
-        setNotes(notes.concat(createdNote))
-        setNewContent('')
-      })
-  }
-}
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const noteToSave = {
+      content: newContent.content,
+      important: newContent.important,
+    };
+    if (editingNote) {
+      update(baseUrl, editingNote._id, noteToSave).then((updatedNote) => {
+        setNotes((prevNotes) =>
+          prevNotes.map((n) => (n._id === updatedNote._id ? updatedNote : n)),
+        );
+        setEditingNote(null);
+        setNewContent(cleanNote);
+      });
+      console.log(editingNote);
+    } else {
+      create(baseUrl, noteToSave).then((createdNote) => {
+        setNotes((prevNotes) => prevNotes.concat(createdNote));
+        // Reset del formulari
+        setNewContent(cleanNote);
+      });
+    }
+  };
 ```
+## 5️⃣ Canvis diversos
+Al butó del formulari
+```tsx
+<button type="submit">{editingNote ? "Actualitzar" : "Crear"}</button>
+```
+Estem a afegint una nova prop que hem de passar i tipar. Per tant: canvis també a les props i el `types/notes.ts`
+## 6️⃣ Perquè no actulitza al moment?
+Hem de canviar el backend perque ens torni tota la nota i no només els camps que hem enviat
+a l'endpoint put:
+canviar `note` per `result`
+```js
+then(result => {
+            result ? response.json(result) : next()
+```
+
+## ✍️ Exercici
+
+
+- Seguint el mateix flux de treball modifica el codi per tenir un botó d'Eliminar funcional:
+  -  Component (Botó)
+  -  Handler
+  -  Servei
+  -  Comprovació de funcionament

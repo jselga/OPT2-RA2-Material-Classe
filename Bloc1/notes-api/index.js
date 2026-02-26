@@ -79,7 +79,7 @@ app.put('/api/notes/:id', (request, response, next) => {
     Note.findByIdAndUpdate(id, newNoteInfo, { returnDocument: 'after' }
     )
         .then(result => {
-            result ? response.json(note) : next()
+            result ? response.json(result) : next()
         }).catch(error => next(error))
 })
 // DELETE

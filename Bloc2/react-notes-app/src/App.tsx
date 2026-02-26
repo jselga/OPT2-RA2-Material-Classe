@@ -46,16 +46,18 @@ function App() {
     };
     if (editingNote) {
       update(baseUrl, editingNote._id, noteToSave).then((updatedNote) => {
-        setNotes(
-          notes.map((n) => (n._id === updatedNote._id ? updatedNote : n)),
+        console.log("UPDATED",updatedNote);
+        
+        setNotes((prevNotes) =>
+          prevNotes.map((n) => (n._id === updatedNote._id ? updatedNote : n)),
         );
+        setEditingNote(null);
+        setNewContent(cleanNote);
       });
       console.log(editingNote);
-      
-      setEditingNote(null)
     } else {
       create(baseUrl, noteToSave).then((createdNote) => {
-        setNotes(notes.concat(createdNote));
+        setNotes((prevNotes) => prevNotes.concat(createdNote));
         // Reset del formulari
         setNewContent(cleanNote);
       });
