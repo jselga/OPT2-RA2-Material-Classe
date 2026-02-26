@@ -70,6 +70,7 @@ function App() {
           {notes?.map((note) => (
             <li key={note._id}>
               <p>{note.content}</p>
+              <button onClick={()=>handleEdit(note)}>Editar</button>
               <button onClick={() => handleGetById(note._id)}>Detalls</button>
               {selectedNote?._id === note._id && (
                 <div>

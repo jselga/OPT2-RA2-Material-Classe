@@ -277,6 +277,17 @@ Quan vulguem editar una nota, carregarem el seu contingut al formulari:
     setNewContent({ content: note.content, important: note.important });
   };
 ```
+---
+## 2️⃣ Component (llista amb botó Editar)
+
+A la llista de notes afegim un botó:
+
+```tsx
+<button onClick={() => handleEdit(note)}>
+  Editar
+</button>
+```
+
+Ara el mateix formulari servirà tant per crear com per editar.
 
 ---
-
