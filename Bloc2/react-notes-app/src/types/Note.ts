@@ -11,6 +11,7 @@ export type NewNote = {
 };
 export type NoteFormProps = {
   newContent: NewNote
+  editingNote: Note | null
   onContentChange: (value: string) => void
   onImportantChange: (value: boolean) => void
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void

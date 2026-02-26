@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { NewNote, Note } from "./types/Note";
-import { create, getAll, getById } from "./services/notes";
+import { create, getAll, getById, update } from "./services/notes";
 import { NoteForm } from "./NoteForm";
 const baseUrl = import.meta.env.VITE_NOTES_API_URL as string;
 const cleanNote = {
@@ -40,17 +40,26 @@ function App() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Creant nota:", newContent);
-    const noteToCreate = {
+    const noteToSave = {
       content: newContent.content,
       important: newContent.important,
     };
-
-    create(baseUrl, noteToCreate).then((createdNote) => {
-      setNotes(notes.concat(createdNote));
-      // Reset del formulari
-      setNewContent(cleanNote);
-    });
+    if (editingNote) {
+      update(baseUrl, editingNote._id, noteToSave).then((updatedNote) => {
+        setNotes(
+          notes.map((n) => (n._id === updatedNote._id ? updatedNote : n)),
+        );
+      });
+      console.log(editingNote);
+      
+      setEditingNote(null)
+    } else {
+      create(baseUrl, noteToSave).then((createdNote) => {
+        setNotes(notes.concat(createdNote));
+        // Reset del formulari
+        setNewContent(cleanNote);
+      });
+    }
   };
 
   const handleEdit = (note: Note) => {
@@ -70,7 +79,7 @@ function App() {
           {notes?.map((note) => (
             <li key={note._id}>
               <p>{note.content}</p>
-              <button onClick={()=>handleEdit(note)}>Editar</button>
+              <button onClick={() => handleEdit(note)}>Editar</button>
               <button onClick={() => handleGetById(note._id)}>Detalls</button>
               {selectedNote?._id === note._id && (
                 <div>
@@ -92,6 +101,7 @@ function App() {
           <h1>Create Note</h1>
           <NoteForm
             newContent={newContent}
+            editingNote={editingNote}
             onContentChange={handleContentChange}
             onImportantChange={handleImportantChange}
             onSubmit={handleSubmit}

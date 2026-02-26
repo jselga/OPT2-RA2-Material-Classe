@@ -2,6 +2,7 @@ import type { NoteFormProps } from "./types/Note";
 
 export const NoteForm = ({
   newContent,
+  editingNote,
   onContentChange,
   onImportantChange,
   onSubmit,
@@ -17,7 +18,7 @@ export const NoteForm = ({
         checked={newContent.important}
         onChange={(e) => onImportantChange(e.currentTarget.checked)}
       />
-      <button type="submit">Crear</button>
+      <button type="submit">{editingNote ? "Actualitzar" : "Crear"}</button>
     </form>
   );
 };

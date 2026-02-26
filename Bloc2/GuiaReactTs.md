@@ -303,3 +303,36 @@ export const update = async (url:string,id: string,updatedNote: NewNote):Promise
 ```
 
 ---
+## 4️⃣ Handlers (modificar handleSubmit)
+
+Modifiquem la funció perquè detecti si estem editant:
+
+```tsx
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault()
+
+  const noteToSave = {
+    content: newContent,
+    important: false
+  }
+
+  if (editingNote) {
+    update(editingNote._id, noteToSave)
+      .then(updatedNote => {
+        setNotes(
+          notes.map(n =>
+            n._id === updatedNote._id ? updatedNote : n
+          )
+        )
+        setEditingNote(null)
+        setNewContent('')
+      })
+  } else {
+    create(baseUrl, noteToSave)
+      .then(createdNote => {
+        setNotes(notes.concat(createdNote))
+        setNewContent('')
+      })
+  }
+}
+```
