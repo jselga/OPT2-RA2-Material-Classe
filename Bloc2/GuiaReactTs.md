@@ -345,15 +345,180 @@ Hem de canviar el backend perque ens torni tota la nota i no només els camps qu
 a l'endpoint put:
 canviar `note` per `result`
 ```js
-then(result => {
-            result ? response.json(result) : next()
+Note.findByIdAndUpdate(id, newNoteInfo, { returnDocument: 'after' })
+  .then(result => response.json(result))
 ```
+>###  Punt important – Contracte API  
+>El backend ha de retornar la nota completa actualitzada (amb `_id`, `date`, etc.), no només el `request.body`.  
+ Backend i frontend tenen un contracte: el tipus que retorna l’API ha de coincidir amb el tipus Note del frontend.  
+> Si el backend retornés només:
+`response.json(request.body)`   
+El frontend no podria fer: `n._id === updatedNote._id`  
 
-## ✍️ Exercici
 
+## ✍️ Exercici DELETE
 
 - Seguint el mateix flux de treball modifica el codi per tenir un botó d'Eliminar funcional:
   -  Component (Botó)
   -  Handler
   -  Servei
   -  Comprovació de funcionament
+
+---
+## ✍️ Exercici de Refactor
+Separar lògica en:
+
+```
+src/
+ ├── components/
+ ├── services/
+ ├── types/
+ └──App.tsx
+```
+
+Crear:
+
+- `NoteList.tsx`
+- `NoteForm.tsx`
+
+
+Refactoritza tot el projecte perquè:
+
+- App.tsx només coordini
+- La llista estigui en un component separat
+---
+## ✍️ Exercici Refactor avançat – Separar handlers en una carpeta
+
+En projectes una mica més grans podem separar la lògica dels handlers en un fitxer propi.
+
+Estructura possible:
+
+```
+src/
+ ├── components/
+ ├── services/
+ ├── types/
+ ├── hooks/
+ │   └── useNotes.ts
+ └── App.tsx
+```
+
+En lloc de tenir tota la lògica dins d’`App.tsx`, podem crear un custom hook:
+```ts
+// hooks/useNotes.ts
+import { useState, useEffect } from 'react'
+import { getAll, create, update, remove } from '../services/notes'
+import { Note } from '../types/note'
+
+export const useNotes = (baseUrl: string) => {... return {
+    notes,
+    editingNote,
+    setEditingNote,
+    handleCreate,
+    handleUpdate,
+    handleDelete
+  }
+}
+```
+
+# 🚀 Integració amb React Hook Form i Zod
+
+Ara que ja entenem com funciona un formulari controlat manualment, introduirem una eina professional per gestionar formularis i validacions.
+
+Objectiu:
+
+- Simplificar la gestió d’estat del formulari
+- Integrar validació amb Zod
+- Mantenir coherència amb el Tema 2 del mòdul
+
+---
+
+## 1️⃣ Instal·lació
+
+```bash
+npm install react-hook-form zod @hookform/resolvers
+```
+
+---
+
+## 2️⃣ Definir esquema amb Zod
+
+`src/schemas/noteSchema.ts`
+
+```ts
+import { z } from 'zod'
+
+export const noteSchema = z.object({
+  content: z.string().min(1, 'El contingut és obligatori'),
+  important: z.boolean()
+})
+
+export type NoteFormData = z.infer<typeof noteSchema>
+```
+
+---
+
+## 3️⃣ Utilitzar React Hook Form al NoteForm
+
+```tsx
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { noteSchema, NoteFormData } from '../schemas/noteSchema'
+
+export const NoteForm = ({ onSubmit }: { onSubmit: (data: NoteFormData) => void }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<NoteFormData>({
+    resolver: zodResolver(noteSchema),
+    defaultValues: {
+      content: '',
+      important: false
+    }
+  })
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register('content')} />
+      {errors.content && <p>{errors.content.message}</p>}
+
+      <label>
+        Important
+        <input type="checkbox" {...register('important')} />
+      </label>
+
+      <button type="submit">Guardar</button>
+    </form>
+  )
+}
+```
+
+---
+
+## 4️⃣ Què hem millorat?
+
+Comparació amb formulari manual:
+
+- ❌ Ja no necessitem `useState` per cada camp
+- ❌ No necessitem gestionar manualment errors
+- ✅ Validació centralitzada amb Zod
+- ✅ Tipus inferits automàticament
+- ✅ Formulari més net
+
+---
+
+## 🧠 Reflexió
+
+Ara es veu clar el problema que resol RHF:
+
+Quan el formulari creix, la gestió manual es complica.
+
+React Hook Form ens permet:
+
+- Millor escalabilitat
+- Menys codi repetitiu
+- Validació robusta
+
+---
+
