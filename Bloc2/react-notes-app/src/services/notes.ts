@@ -20,3 +20,9 @@ export const update = async (url: string, id: string, updatedNote: NewNote): Pro
   const res = await axios.put(`${url}/${id}`, updatedNote)
   return res.data
 }
+
+//DELETE
+export const remove = async(url:string,id:string):Promise<void>=>{
+   await axios.delete(`${url}/${id}`)
+
+}

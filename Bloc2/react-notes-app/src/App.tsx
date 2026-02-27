@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { NewNote, Note } from "./types/Note";
-import { create, getAll, getById, update } from "./services/notes";
+import { create, getAll, getById, remove, update } from "./services/notes";
 import { NoteForm } from "./NoteForm";
 const baseUrl = import.meta.env.VITE_NOTES_API_URL as string;
 const cleanNote = {
@@ -68,6 +68,13 @@ function App() {
     setEditingNote(note);
     setNewContent({ content: note.content, important: note.important });
   };
+  const handleDelete = (id:string)=>{
+    remove(baseUrl,id)
+    .then(()=>{
+      setNotes(notes.filter(n=> n._id!==id))
+    })
+    .catch(error=>console.error(error))
+  }
   useEffect(() => {
     getAll(baseUrl).then(setNotes).catch(console.error);
   }, []);
@@ -80,9 +87,9 @@ function App() {
         <ul>
           {notes?.map((note) => (
             <li key={note._id}>
-              <p>{note.content}</p>
-              <button onClick={() => handleEdit(note)}>Editar</button>
-              <button onClick={() => handleGetById(note._id)}>Detalls</button>
+              <p>{note.content}<button onClick={() => handleGetById(note._id)}>+</button></p>
+
+            
               {selectedNote?._id === note._id && (
                 <div>
                   <p>ID: {selectedNote._id}</p>
@@ -94,6 +101,8 @@ function App() {
                   )}
                 </div>
               )}
+                            <button onClick={() => handleEdit(note)}>Editar</button>
+              <button onClick={() => handleDelete(note._id)}>Eliminar</button>
             </li>
           ))}
         </ul>
