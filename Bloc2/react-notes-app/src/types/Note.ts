@@ -1,3 +1,4 @@
+import type { NoteFormData } from "../schemas/noteSchema";
 
 export type Note = {
   _id: string;
@@ -10,9 +11,6 @@ export type NewNote = {
   important: boolean;
 };
 export type NoteFormProps = {
-  newContent: NewNote
-  editingNote: Note | null
-  onContentChange: (value: string) => void
-  onImportantChange: (value: boolean) => void
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+   editingNote: Note | null;
+  onSubmit: (data:NoteFormData)=>void;
 }
