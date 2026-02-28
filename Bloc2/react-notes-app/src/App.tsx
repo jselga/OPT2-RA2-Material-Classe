@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { NewNote, Note } from "./types/Note";
 import { create, getAll, getById, remove, update } from "./services/notes";
 import { NoteForm } from "./NoteForm";
+import type { NoteFormData } from "./schemas/noteSchema";
 const baseUrl = import.meta.env.VITE_NOTES_API_URL as string;
 const cleanNote = {
   content: "",
@@ -12,7 +13,7 @@ function App() {
   const [note, setNote] = useState<Note | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-  const [newContent, setNewContent] = useState<NewNote>(cleanNote);
+  const [data, setNewContent] = useState<NewNote>(cleanNote);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
 
   const handleGetById = (id: string) => {
@@ -38,11 +39,11 @@ function App() {
     setNewContent((prev) => ({ ...prev, important: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = (data:NoteFormData) => {
+
     const noteToSave = {
-      content: newContent.content,
-      important: newContent.important,
+      content: data.content,
+      important: data.important,
     };
     if (editingNote) {
       update(baseUrl, editingNote._id, noteToSave).then((updatedNote) => {
@@ -110,13 +111,14 @@ function App() {
       <section>
         <div>
           <h1>Create Note</h1>
-          <NoteForm
+          {/* <NoteForm
             newContent={newContent}
             editingNote={editingNote}
             onContentChange={handleContentChange}
             onImportantChange={handleImportantChange}
             onSubmit={handleSubmit}
-          />
+          /> */}
+          <NoteForm onSubmit={handleSubmit}  />
         </div>
       </section>
     </div>

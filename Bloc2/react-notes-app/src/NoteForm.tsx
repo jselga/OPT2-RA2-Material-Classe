@@ -1,24 +1,30 @@
-import type { NoteFormProps } from "./types/Note";
+import { useForm } from "react-hook-form";
+import { noteSchema, type NoteFormData } from "./schemas/noteSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const NoteForm = ({
-  newContent,
-  editingNote,
-  onContentChange,
-  onImportantChange,
   onSubmit,
-}: NoteFormProps) => {
+}: {
+  onSubmit: (data: NoteFormData) => void;
+}) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<NoteFormData>({
+    resolver: zodResolver(noteSchema),
+    defaultValues: {
+      content: "",
+      important: false,
+    },
+  });
   return (
-    <form onSubmit={onSubmit}>
-      <input
-        value={newContent.content}
-        onChange={(e) => onContentChange(e.currentTarget.value)}
-      />
-      <input
-        type="checkbox"
-        checked={newContent.important}
-        onChange={(e) => onImportantChange(e.currentTarget.checked)}
-      />
-      <button type="submit">{editingNote ? "Actualitzar" : "Crear"}</button>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register("content")} />
+{errors.content && <p>{errors.content.message}</p>}
+      <input type="checkbox" {...register("important")} />
+      {/* <button type="submit">{editingNote ? "Actualitzar" : "Crear"}</button> */}
+      <button type="submit">Crear</button>
     </form>
   );
 };
