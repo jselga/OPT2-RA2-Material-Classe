@@ -3,18 +3,17 @@ import type { Note } from "./types/Note";
 import { create, getAll, getById, remove, update } from "./services/notes";
 import { NoteForm } from "./NoteForm";
 import type { NoteFormData } from "./schemas/noteSchema";
-const baseUrl = import.meta.env.VITE_NOTES_API_URL as string;
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
-  const [note, setNote] = useState<Note | null>(null);
+  // const [note, setNote] = useState<Note | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
 
   const handleGetById = (id: string) => {
     setError(null);
-    setNote(null);
-    getById(baseUrl, id)
+    // setNote(null);
+    getById(id)
       .then(setSelectedNote)
       .catch((error) => {
         if (error.response?.status === 404) {
@@ -33,37 +32,34 @@ function App() {
       important: data.important,
     };
     if (editingNote) {
-      update(baseUrl, editingNote._id, noteToSave).then((updatedNote) => {
+      update(editingNote._id, noteToSave).then((updatedNote) => {
         console.log("UPDATED", updatedNote);
 
         setNotes((prevNotes) =>
           prevNotes.map((n) => (n._id === updatedNote._id ? updatedNote : n)),
         );
         setEditingNote(null);
-
       });
       console.log(editingNote);
     } else {
-      create(baseUrl, noteToSave).then((createdNote) => {
+      create(noteToSave).then((createdNote) => {
         setNotes((prevNotes) => prevNotes.concat(createdNote));
-
       });
     }
   };
 
   const handleEdit = (note: Note) => {
     setEditingNote(note);
-
   };
   const handleDelete = (id: string) => {
-    remove(baseUrl, id)
+    remove(id)
       .then(() => {
         setNotes(notes.filter((n) => n._id !== id));
       })
       .catch((error) => console.error(error));
   };
   useEffect(() => {
-    getAll(baseUrl).then(setNotes).catch(console.error);
+    getAll().then(setNotes).catch(console.error);
   }, []);
 
   return (

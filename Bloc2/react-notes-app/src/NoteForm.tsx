@@ -3,7 +3,7 @@ import { noteSchema, type NoteFormData } from "./schemas/noteSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { NoteFormProps } from "./types/Note";
 import { useEffect } from "react";
-const emptyNote={
+const emptyNote : NoteFormData={
   content:"",
   important:false
 };
@@ -18,11 +18,8 @@ export const NoteForm = ({ editingNote, onSubmit }: NoteFormProps) => {
     defaultValues: emptyNote
   });
   useEffect(() => {
-    if (editingNote) {
-      reset(editingNote);
-    } else{
-      reset(emptyNote)
-    }
+    if (editingNote) reset(editingNote);
+    else reset(emptyNote);  
   }, [editingNote, reset]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
