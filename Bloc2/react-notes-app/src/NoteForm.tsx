@@ -3,7 +3,10 @@ import { noteSchema, type NoteFormData } from "./schemas/noteSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { NoteFormProps } from "./types/Note";
 import { useEffect } from "react";
-
+const emptyNote={
+  content:"",
+  important:false
+};
 export const NoteForm = ({ editingNote, onSubmit }: NoteFormProps) => {
   const {
     register,
@@ -12,17 +15,13 @@ export const NoteForm = ({ editingNote, onSubmit }: NoteFormProps) => {
     formState: { errors },
   } = useForm<NoteFormData>({
     resolver: zodResolver(noteSchema),
-    defaultValues: {
-      content: "",
-      important: false,
-    },
+    defaultValues: emptyNote
   });
   useEffect(() => {
     if (editingNote) {
-      reset({
-        content: editingNote.content,
-        important: editingNote.important,
-      });
+      reset(editingNote);
+    } else{
+      reset(emptyNote)
     }
   }, [editingNote, reset]);
   return (
@@ -30,8 +29,7 @@ export const NoteForm = ({ editingNote, onSubmit }: NoteFormProps) => {
       <input {...register("content")} />
       {errors.content && <p>{errors.content.message}</p>}
       <input type="checkbox" {...register("important")} />
-      <button type="submit">{editingNote ? "Actualitzar" : "Crear"}</button>
-      {/* <button type="submit">Crear</button> */}
+      <button type="submit">{editingNote ? "Actualitzar" : "Crear"}</button>     
     </form>
   );
 };
