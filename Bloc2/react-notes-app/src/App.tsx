@@ -1,29 +1,22 @@
-import { useEffect, useState } from "react";
 import type { Note } from "./types/Note";
-import { create, getAll, getById, remove, update } from "./services/notes";
 import { NoteForm } from "./NoteForm";
 import type { NoteFormData } from "./schemas/noteSchema";
+import { useNotes } from "./hooks/useNotes";
 function App() {
-  const [notes, setNotes] = useState<Note[]>([]);
-  // const [note, setNote] = useState<Note | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const {
+    notes,
+    editingNote,
+    selectedNote,
+    setEditingNote,
+    loadNoteDetails,
+    addNote,
+    updateNote,
+    deleteNote,
+    error
+  } = useNotes();
 
   const handleGetById = (id: string) => {
-    setError(null);
-    // setNote(null);
-    getById(id)
-      .then(setSelectedNote)
-      .catch((error) => {
-        if (error.response?.status === 404) {
-          setError("Nota no trobada");
-        } else if (error.response?.status === 400) {
-          setError("Id mal formatada");
-        } else {
-          setError("Error inesperat");
-        }
-      });
+    loadNoteDetails(id);
   };
 
   const handleSubmit = (data: NoteFormData) => {
@@ -31,20 +24,11 @@ function App() {
       content: data.content,
       important: data.important,
     };
-    if (editingNote) {
-      update(editingNote._id, noteToSave).then((updatedNote) => {
-        console.log("UPDATED", updatedNote);
 
-        setNotes((prevNotes) =>
-          prevNotes.map((n) => (n._id === updatedNote._id ? updatedNote : n)),
-        );
-        setEditingNote(null);
-      });
-      console.log(editingNote);
+    if (editingNote) {
+      updateNote(editingNote._id, noteToSave);
     } else {
-      create(noteToSave).then((createdNote) => {
-        setNotes((prevNotes) => prevNotes.concat(createdNote));
-      });
+      addNote(noteToSave);
     }
   };
 
@@ -52,15 +36,8 @@ function App() {
     setEditingNote(note);
   };
   const handleDelete = (id: string) => {
-    remove(id)
-      .then(() => {
-        setNotes(notes.filter((n) => n._id !== id));
-      })
-      .catch((error) => console.error(error));
+    deleteNote(id);
   };
-  useEffect(() => {
-    getAll().then(setNotes).catch(console.error);
-  }, []);
 
   return (
     <div>
