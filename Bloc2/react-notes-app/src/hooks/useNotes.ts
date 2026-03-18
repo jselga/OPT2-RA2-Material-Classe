@@ -9,7 +9,7 @@ export const useNotes = () => {
     const [selectedNote, setSelectedNote] = useState<Note | null>(null);
       const [error, setError] = useState<string | null>(null);
 
-    const loadNoteDetails = async (id) => {
+    const loadNoteDetails = async (id:string) => {
         const note = await getById(id);
         setSelectedNote(note);
 
